@@ -1,0 +1,79 @@
+apiVersion: ray.io/v1
+kind: RayCluster
+metadata:
+  creationTimestamp: "2024-08-13T09:01:52Z"
+  generation: 1
+  name: raycluster-sample
+  namespace: default
+  resourceVersion: "46833064"
+  uid: 5dd75adb-3f26-40c9-9860-a5a482041134
+spec:
+  headGroupSpec:
+    rayStartParams: {}
+    template:
+      spec:
+        containers:
+        - image: rayproject/ray:2.9.0
+          name: ray-head
+          ports:
+          - containerPort: 6379
+            name: gcs-server
+            protocol: TCP
+          - containerPort: 8265
+            name: dashboard
+            protocol: TCP
+          - containerPort: 10001
+            name: client
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 1
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 2Gi
+  rayVersion: 2.9.0
+  workerGroupSpecs:
+  - groupName: small-group
+    maxReplicas: 5
+    minReplicas: 1
+    numOfHosts: 1
+    rayStartParams: {}
+    replicas: 1
+    template:
+      spec:
+        containers:
+        - image: rayproject/ray:2.9.0
+          name: ray-worker
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+status:
+  availableWorkerReplicas: 1
+  desiredCPU: "1"
+  desiredGPU: "0"
+  desiredMemory: 3Gi
+  desiredTPU: "0"
+  desiredWorkerReplicas: 1
+  endpoints:
+    client: "10001"
+    dashboard: "8265"
+    gcs-server: "6379"
+    metrics: "8080"
+  head:
+    podIP: 172.19.14.240
+    podName: raycluster-sample-head-vqdms
+    serviceIP: 172.19.14.240
+    serviceName: raycluster-sample-head-svc
+  lastUpdateTime: "2024-08-13T09:02:17Z"
+  maxWorkerReplicas: 5
+  minWorkerReplicas: 1
+  observedGeneration: 1
+  readyWorkerReplicas: 1
+  state: ready
+  stateTransitionTimes:
+    ready: "2024-08-13T09:02:17Z"
